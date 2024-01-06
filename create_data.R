@@ -3,8 +3,7 @@ create_data <- function(tracking) {
   football <- tracking %>%
     filter(displayName == "football") %>%
     select(gameId, playId, frameId, x, y, s, a, dis)
-  
-  # ALSO JOIN TACKLES ON TACKLER
+
   
   # Create a data frame with tracking data
   df <- tracking %>%
