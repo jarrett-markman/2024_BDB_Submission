@@ -74,7 +74,7 @@ play_frames2 <- plot_field() +
   geom_text(
     data = game_2 %>% dplyr::filter(club == "PHI"),
     mapping = aes(x = x, y = y, label = tackle_prob),
-    colour = df_colors2$away_2, size = 4.5, vjust = -1, fontface = "bold"
+    colour = "#f8f9fa", size = 4.5, vjust = -1, fontface = "bold"
   ) +
   # ball
   geom_point(
