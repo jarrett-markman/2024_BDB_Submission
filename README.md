@@ -1,8 +1,7 @@
 # Project Title
 Whatever links and text for project description
 
-In order to store both the individual and tackle model in R.
-Download the files titled:
+In order to store both the individual and tackle model in R, download the files titled:
 - individual_tackle_model.rds
 - team_tackle_model.rds
 - Run the following code (assuming by default the files are stored to default wd in R)
