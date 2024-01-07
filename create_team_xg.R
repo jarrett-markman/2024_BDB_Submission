@@ -47,3 +47,4 @@ team_tackle_model <- xgb.train(
 # Make predictions and combine into the data frame
 team_tackle_preds <- predict(team_tackle_model, test_data_team_matrix)
 team_preds_df <- bind_cols(test_data_team, team_tackle_preds) %>% rename(tackle_prob = ...145)
+saveRDS(team_tackle_model, file = "team_tackle_model.rds")
