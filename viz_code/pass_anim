@@ -1,0 +1,105 @@
+# game_2id = 2022100902
+# play_2id = 2969
+data2 <- tracking_wk6 %>%
+  left_join(plays, by = c("gameId", "playId")) %>%
+  filter(gameId == "2022101611" & playId == "3372") %>%
+  left_join(preds_df, by = c("gameId" = "game_id", "playId" = "play_id", 
+                             "frameId" = "frame_id", "nflId" = "player_id")) %>%
+  mutate(tackle_prob = ifelse(is.na(tackle_prob), 0, tackle_prob)) %>%
+  rename(club = club.x, absoluteYardlineNumber = absoluteYardlineNumber.x, playDescription = playDescription.x)
+
+game_2 <- data2 %>%
+  mutate(dir_rad = player_dir * pi / 180,
+         v_x = sin(dir_rad) * player_s,
+         v_y = cos(dir_rad) * player_s,
+         v_theta = atan(v_y / v_x),
+         v_theta = ifelse(is.nan(v_theta), 0, v_theta)) %>%
+  mutate(tackle_prob = round(tackle_prob, digits = 4),
+         tackle_prob = ifelse(tackle_prob < .1, 0, tackle_prob))
+
+los2 <- game_2$absoluteYardlineNumber
+tog2 <- los2 - game_2$yardsToGo
+
+df_colors2 <- fetch_team_colors(h_team_ = "PHI", a_team_ = "DAL", diverge_ = T)
+
+play_frames2 <- plot_field() + 
+  # line of scrimmage
+  annotate(
+    "segment",
+    x = los2, xend = los2, y = 0, yend = 160/3,
+    colour = "#0d41e1", size = 1.5
+  ) +
+  # 1st down marker
+  annotate(
+    "segment",
+    x = tog2, xend = tog2, y = 0, yend = 160/3,
+    colour = "#f9c80e", size = 1.5
+  ) +
+  # away team velocities
+  geom_segment(
+    data = game_2 %>% dplyr::filter(club == "DAL"),
+    mapping = aes(x = x, y = y, xend = x + v_x, yend = y + v_y),
+    colour = df_colors2$away_1, size = 1, arrow = arrow(length = unit(0.01, "npc"))
+  ) + 
+  # home team velocities
+  geom_segment(
+    data = game_2 %>% dplyr::filter(club == "PHI"),
+    mapping = aes(x = x, y = y, xend = x + v_x, yend = y + v_y),
+    colour = df_colors2$home_2, size = 1, arrow = arrow(length = unit(0.01, "npc"))
+  ) +
+  # away team locs and jersey numbers
+  geom_point(
+    data = game_2 %>% dplyr::filter(club == "DAL"),
+    mapping = aes(x = x, y = y),
+    fill = "#f8f9fa", colour = df_colors2$away_2,
+    shape = 21, alpha = 1, size = 8, stroke = 1.5
+  ) +
+  geom_text(
+    data = game_2 %>% dplyr::filter(club == "DAL"),
+    mapping = aes(x = x, y = y, label = jerseyNumber),
+    colour = df_colors2$away_1, size = 4.5
+  ) +
+  # home team locs and jersey numbers
+  geom_point(
+    data = game_2 %>% dplyr::filter(club == "PHI"),
+    mapping = aes(x = x, y = y),
+    fill = df_colors2$home_1, colour = df_colors2$home_2,
+    shape = 21, alpha = 1, size = 8, stroke = 1.5
+  ) +
+  geom_text(
+    data = game_2 %>% dplyr::filter(club == "PHI"),
+    mapping = aes(x = x, y = y, label = jerseyNumber),
+    colour = df_colors2$home_2, size = 4.5, vjust = .5
+  ) +
+  geom_text(
+    data = game_2 %>% dplyr::filter(club == "PHI"),
+    mapping = aes(x = x, y = y, label = tackle_prob),
+    colour = df_colors2$away_2, size = 4.5, vjust = -1, fontface = "bold"
+  ) +
+  # ball
+  geom_point(
+    data = game_2 %>% dplyr::filter(club == "football"),
+    mapping = aes(x = x, y = y),
+    fill = "#935e38", colour = "#d9d9d9",
+    shape = 21, alpha = 1, size = 4, stroke = 1
+  ) +
+  # title 
+  labs(title = game_2$playDescription) +
+  # animation stuff
+  transition_time(frameId)  +
+  ease_aes("linear") + 
+  NULL
+
+play_length2 <- length(unique(game_2$frameId))
+play_anim2 <- animate(
+  play_frames2,
+  fps = 8/3, 
+  nframe = play_length2,
+  width = 800,
+  height = 400,
+  end_pause = 0
+)
+
+play_anim2
+
+anim_save("pass animation.gif", animaion = play_anim2)
