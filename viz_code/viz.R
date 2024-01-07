@@ -192,24 +192,6 @@ off_taoe_leaders <- off_plot_df %>%
              subtitle = "Weeks 4-9 of 2022")
 gtsave(off_taoe_leaders, "Offensive Players Tackled Table.png")
 
-# VIZ 7
-# Find var importance in model
-team_var_imp <- vip(team_tackle_model, num_features = 5)$data
-team_var_imp_plot <- team_var_imp %>%
-  ggplot(aes(x = reorder(Variable, Importance), y = Importance, fill = Importance)) + 
-  geom_bar(stat = "identity") +
-  coord_flip() +
-  theme_fivethirtyeight() +
-  scale_fill_viridis_c(option = "viridis", direction = -1) +
-  labs(x = "",
-       title = "Team Variable Importance Plot",
-       subtitle = "5 Most Important Model Variables") +
-  theme(plot.title = element_text(face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(size = 8, hjust = 0.5),
-        legend.position = "none")
-ggsave("Team Model Variable Importance.png", team_var_imp_plot)
-
-
 # Get team offensive/defensive probs
 off_team_probs <- team_preds_df %>%
   group_by(off_team) %>%
@@ -228,7 +210,7 @@ def_team_probs <- team_preds_df %>%
 team_probs <- inner_join(off_team_probs, def_team_probs, by = c("off_team" = "def_team")) %>% 
   rename(team = off_team)
 
-# VIZ 8
+# VIZ 7
 team_plot <- team_probs %>% 
   ggplot(aes(x = tackles_over_x, y = tackled_under_x)) +
   nflplotR::geom_nfl_logos(aes(team_abbr = team), width = .05) +
