@@ -53,19 +53,20 @@ create_coords <- function(tracking) {
     mutate(def_team_wp = ifelse(homeTeamAbbr == defensiveTeam, preSnapHomeTeamWinProbability,
                                 preSnapVisitorTeamWinProbability)) %>%
     summarise(game_id = gameId, play_id = playId, frame_id = frameId, event, desc = playDescription, gameClock,
-              qtr = quarter, down, ydstogo = yardsToGo,
-              off_team = possessionTeam, def_team = defensiveTeam, def_team_wp, defendersInTheBox, passProbability,
-              football_x, football_y, football_s, football_a, football_dis, absoluteYardlineNumber,
-              pass = ifelse(passResult == "C", 1, 0),
-              scramble = ifelse(passResult == "R", 1, 0),
-              rush = ifelse(is.na(passResult), 1, 0),
-              shotgun = ifelse(offenseFormation == "SHOTGUN", 1, 0),
-              empty = ifelse(offenseFormation == "EMPTY", 1, 0),
-              iform = ifelse(offenseFormation == "I_FORM", 1, 0),
-              singleback = ifelse(offenseFormation == "SINGLEBACK", 1, 0),
-              pistol = ifelse(offenseFormation == "PISTOL", 1, 0),
-              jumbo = ifelse(offenseFormation == "JUMBO", 1, 0),
-              wildcat = ifelse(offenseFormation == "WILDCAT", 1, 0)) %>%
+           qtr = quarter, down, ydstogo = yardsToGo,
+           off_team = possessionTeam, def_team = defensiveTeam, def_team_wp, defendersInTheBox, passProbability,
+           football_x, football_y, football_s, football_a, football_dis, absoluteYardlineNumber,
+           pass = ifelse(passResult == "C", 1, 0),
+            scramble = ifelse(passResult == "R", 1, 0),
+            rush = ifelse(is.na(passResult), 1, 0),
+           pass = ifelse(is.na(pass), 0, pass), scramble = ifelse(is.na(scramble), 0, scramble),
+            shotgun = ifelse(offenseFormation == "SHOTGUN", 1, 0),
+            empty = ifelse(offenseFormation == "EMPTY", 1, 0),
+            iform = ifelse(offenseFormation == "I_FORM", 1, 0),
+            singleback = ifelse(offenseFormation == "SINGLEBACK", 1, 0),
+            pistol = ifelse(offenseFormation == "PISTOL", 1, 0),
+            jumbo = ifelse(offenseFormation == "JUMBO", 1, 0),
+            wildcat = ifelse(offenseFormation == "WILDCAT", 1, 0)) %>%
     inner_join(def_coords, by = c("game_id", "play_id", "frame_id")) %>%
     mutate(
       team_tackle_made = ifelse(event == "tackle", 1, 0),
