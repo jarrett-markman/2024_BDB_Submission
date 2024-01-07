@@ -103,3 +103,4 @@ tackle_model <- xgb.train(
 # Make predictions and combine into the data frame
 tackle_preds <- predict(tackle_model, tackle_pred_matrix)
 preds_df <- bind_cols(test_data, tackle_preds) %>% rename(tackle_prob = ...51)
+saveRDS(tackle_model, file = "individual_tackle_model.rds")
