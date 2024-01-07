@@ -73,6 +73,7 @@ create_data <- function(tracking) {
       pass = ifelse(passResult == "C", 1, 0),
       scramble = ifelse(passResult == "R", 1, 0),
       rush = ifelse(is.na(passResult), 1, 0), 
+      pass = ifelse(is.na(pass), 0, pass), scramble = ifelse(is.na(scramble), 0, scramble),
       shotgun = ifelse(offenseFormation == "SHOTGUN", 1, 0),
       empty = ifelse(offenseFormation == "EMPTY", 1, 0),
       iform = ifelse(offenseFormation == "I_FORM", 1, 0),
