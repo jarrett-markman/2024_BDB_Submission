@@ -1,5 +1,4 @@
-# Project Title
-Whatever links and text for project description
+# Tackling the Numbers: Evaluating Player Tackle Probabilities
 
 In order to store both the individual and tackle model in R, download the files (within models folder):
 - individual_tackle_model.rds
