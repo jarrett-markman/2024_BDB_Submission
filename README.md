@@ -6,9 +6,19 @@
 - Use the following libraries
 ```{r}
 library(tidyverse)
-# CONTINUE LIBS
+library(xgboost)
+library(gganimate)
+library(ggridges)
+library(beeswarm)
+library(vip)
+library(gt)
+library(gtExtras)
+library(ggthemes)
 ```
-- wrd
+- Set the seed
+```
+set.seed(1234)
+```
 
 ## How to use our model:
 
