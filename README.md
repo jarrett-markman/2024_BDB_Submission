@@ -1,7 +1,7 @@
 # Tackling the Numbers: Evaluating Player Tackle Probabilities
 
-## Check out our published project:
-- [Tackling the Numbers](URL)
+## Check out our published notebook:
+- [Tackling the Numbers](https://www.kaggle.com/code/jarrettmarkman/tackling-the-numbers?scriptVersionId=158222662)
 
 ## How to replicate our work:
 
