@@ -241,4 +241,19 @@ dist <- preds_df %>%
   theme(
     plot.title = element_text(face = "bold", hjust = 0.5)
   )
-ggsave(dist, "Tackle Density Plot.png")
+ggsave("Tackle Density Plot.png", dist)
+# Extra viz
+team_dist <- team_preds_df %>%
+  ggplot(aes(x = tackle_prob)) +
+  geom_density() +
+  labs(
+    x = "Team Tackle Probability",
+    y = "Kernel Density",
+    title = "Team Tackle Probability Distribution",
+    caption = "Jarrett Markman & Isabel Alfonso | 2024 NFL Big Data Bowl"
+  ) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
+ggsave("Team Tackle Density Plot.png", team_dist)
