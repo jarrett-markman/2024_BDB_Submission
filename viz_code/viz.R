@@ -34,32 +34,32 @@ player_plot_df <- preds_df %>%
 
 
 # VIZ 2
-player_table_top_x <- player_plot_df %>%
-  arrange(-total_x_tackles) %>%
-  mutate(rank = row_number()) %>%
-  head(20) %>%
-  arrange(-tackles_over_x) %>%
-  select(rank, player, headshot_url, total_tackles, total_x_tackles, tackles_over_x) %>%
-  gt() %>%
-  cols_align(align = "center", columns = everything()) %>%
-  data_color(columns = c(tackles_over_x), colors = scales::col_numeric(c("red3", "green3"), 
-                                                                       domain = NULL)) %>%
-  cols_label(
-    rank = "Rank",
-    player = "Player",
-    headshot_url = "",
-    total_tackles = "Tackles",
-    total_x_tackles = "Expected Tackles",
-    tackles_over_x = "Tackles Made Over Expected"
-  ) %>%
-  gt_img_rows(headshot_url) %>%
-  gt_theme_538() %>%
-  tab_header(title = "Defensive Tackles and Expected Tackles Leaders",
-             subtitle = "Weeks 4-9 of 2022") %>%
-  tab_source_note(
-    source_note = "Jarrett Markman & Isabel Alfonso | NFL NFL Big Data Bowl 2024"
-  )
-gtsave(player_table_top_x, "Defensive Tackles and Expected Tackles Leaders (sorted).png")
+# player_table_top_x <- player_plot_df %>%
+#   arrange(-total_x_tackles) %>%
+#   mutate(rank = row_number()) %>%
+#   head(20) %>%
+#   arrange(-tackles_over_x) %>%
+#   select(rank, player, headshot_url, total_tackles, total_x_tackles, tackles_over_x) %>%
+#   gt() %>%
+#   cols_align(align = "center", columns = everything()) %>%
+#   data_color(columns = c(tackles_over_x), colors = scales::col_numeric(c("red3", "green3"), 
+#                                                                        domain = NULL)) %>%
+#   cols_label(
+#     rank = "Rank",
+#     player = "Player",
+#     headshot_url = "",
+#     total_tackles = "Tackles",
+#     total_x_tackles = "Expected Tackles",
+#     tackles_over_x = "Tackles Made Over Expected"
+#   ) %>%
+#   gt_img_rows(headshot_url) %>%
+#   gt_theme_538() %>%
+#   tab_header(title = "Defensive Tackles and Expected Tackles Leaders",
+#              subtitle = "Weeks 4-9 of 2022") %>%
+#   tab_source_note(
+#     source_note = "Jarrett Markman & Isabel Alfonso | NFL NFL Big Data Bowl 2024"
+#   )
+# gtsave(player_table_top_x, "Defensive Tackles and Expected Tackles Leaders (sorted).png")
 
 
 # VIZ 3
@@ -74,7 +74,7 @@ def_plot <- player_plot_df %>%
     box.padding = .25, 
     point.padding = .75,
     segment.color = "white",
-    size = 2
+    size = 3
   ) +
   scale_color_identity() +
   theme_bw() +
@@ -90,7 +90,6 @@ def_plot <- player_plot_df %>%
     plot.subtitle = element_text(size = 8, hjust = 0.5)
   )
 ggsave("Defensive Players Tackle and Expected Tackle Plot.png", def_plot)
-
 
 # VIZ 4
 # Get best defensive players
@@ -119,7 +118,7 @@ def_toe_leaders <- player_plot_df %>%
     source_note = "Jarrett Markman & Isabel Alfonso | NFL NFL Big Data Bowl 2024"
   )
 gtsave(def_toe_leaders, "Defensive Tackles Over Expected Leaders.png")
-
+def_toe_leaders
 
 # Get offensive player tackle nums
 off_plot_df <- preds_df %>%
@@ -147,7 +146,7 @@ off_plot <- off_plot_df %>%
     box.padding = .25, 
     point.padding = .75,
     segment.color = "white",
-    size = 2
+    size = 3
   ) +
   lims(x = c(0, 150), y = c(0, 150)) +
   scale_color_identity() +
@@ -192,6 +191,24 @@ off_taoe_leaders <- off_plot_df %>%
              subtitle = "Weeks 4-9 of 2022")
 gtsave(off_taoe_leaders, "Offensive Players Tackled Table.png")
 
+# VIZ 7
+# Find var importance in model
+team_var_imp <- vip(team_tackle_model, num_features = 5)$data
+team_var_imp_plot <- team_var_imp %>%
+  ggplot(aes(x = reorder(Variable, Importance), y = Importance, fill = Importance)) + 
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_fivethirtyeight() +
+  scale_fill_viridis_c(option = "viridis", direction = -1) +
+  labs(x = "",
+       title = "Team Variable Importance Plot",
+       subtitle = "5 Most Important Model Variables") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(size = 8, hjust = 0.5),
+        legend.position = "none")
+ggsave("Team Model Variable Importance.png", team_var_imp_plot)
+
+
 # Get team offensive/defensive probs
 off_team_probs <- team_preds_df %>%
   group_by(off_team) %>%
@@ -210,7 +227,7 @@ def_team_probs <- team_preds_df %>%
 team_probs <- inner_join(off_team_probs, def_team_probs, by = c("off_team" = "def_team")) %>% 
   rename(team = off_team)
 
-# VIZ 7
+# VIZ 8
 team_plot <- team_probs %>% 
   ggplot(aes(x = tackles_over_x, y = tackled_under_x)) +
   nflplotR::geom_nfl_logos(aes(team_abbr = team), width = .05) +
@@ -227,7 +244,8 @@ team_plot <- team_probs %>%
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
         plot.subtitle = element_text(size = 8, hjust = 0.5))
 ggsave("Team Tackles Plot.png", team_plot)
-# Viz 8
+
+# VIZ 8 (real)
 dist <- preds_df %>%
   ggplot(aes(x = tackle_prob)) +
   geom_density() +
@@ -242,7 +260,7 @@ dist <- preds_df %>%
     plot.title = element_text(face = "bold", hjust = 0.5)
   )
 ggsave("Tackle Density Plot.png", dist)
-# Extra viz
+
 team_dist <- team_preds_df %>%
   ggplot(aes(x = tackle_prob)) +
   geom_density() +
