@@ -1,7 +1,7 @@
 # Tackling the Numbers: Evaluating Player Tackle Probabilities
 
 ## Check out our published project:
--[Tackling the Numbers](URL)
+- [Tackling the Numbers](URL)
 
 ## How to replicate our work:
 
