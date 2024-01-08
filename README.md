@@ -1,6 +1,18 @@
 # Tackling the Numbers: Evaluating Player Tackle Probabilities
 
-In order to store both the individual and tackle model in R, download the files (within models folder):
+## How to replicate our work:
+
+- Download the datasets from [kaggle](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024)
+- Use the following libraries
+```{r}
+library(tidyverse)
+# CONTINUE LIBS
+```
+- wrd
+
+## How to use our model:
+
+Download the files within models folder:
 - individual_tackle_model.rds
 - team_tackle_model.rds
 - Run the following code (assuming by default the files are stored to default wd in R)
