@@ -1,5 +1,8 @@
 # Tackling the Numbers: Evaluating Player Tackle Probabilities
 
+## Check out our published project:
+-[Tackling the Numbers](URL)
+
 ## How to replicate our work:
 
 - Download the datasets from [kaggle](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024)
@@ -19,6 +22,9 @@ library(ggthemes)
 ```
 set.seed(1234)
 ```
+- Run the files for create_ind_data and create_team_data
+- Run the files for create_ind_xg and create_team_xg
+- To create the visuals, run the files within "viz_code"
 
 ## How to use our model:
 
