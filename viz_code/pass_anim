@@ -93,7 +93,7 @@ play_frames2 <- plot_field() +
 play_length2 <- length(unique(game_2$frameId))
 play_anim2 <- animate(
   play_frames2,
-  fps = 8/3, 
+  fps = 8, 
   nframe = play_length2,
   width = 800,
   height = 400,
