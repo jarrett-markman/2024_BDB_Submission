@@ -1,8 +1,6 @@
-# game_id = 2022101611	
-# play_id = 1010
-data <- tracking_wk6 %>%
+data <- tracking_wk7 %>%
   left_join(plays, by = c("gameId", "playId")) %>%
-  filter(gameId == "2022101611" & playId == "1010") %>%
+  filter(gameId == "2022102309" & playId == "576") %>%
   left_join(preds_df, by = c("gameId" = "game_id", "playId" = "play_id", 
                              "frameId" = "frame_id", "nflId" = "player_id")) %>%
   mutate(tackle_prob = ifelse(is.na(tackle_prob), 0, tackle_prob)) %>%
@@ -20,7 +18,7 @@ game_ <- data %>%
 los <- game_$absoluteYardlineNumber
 tog <- los - game_$yardsToGo
 
-df_colors <- fetch_team_colors(h_team_ = "PHI", a_team_ = "DAL", diverge_ = T)
+df_colors <- fetch_team_colors(h_team_ = "LAC", a_team_ = "SEA", diverge_ = T)
 
 play_frames <- plot_field() + 
   # line of scrimmage
@@ -37,44 +35,44 @@ play_frames <- plot_field() +
   ) +
   # away team velocities
   geom_segment(
-    data = game_ %>% dplyr::filter(club == "DAL"),
+    data = game_ %>% dplyr::filter(club == "SEA"),
     mapping = aes(x = x, y = y, xend = x + v_x, yend = y + v_y),
     colour = df_colors$away_1, size = 1, arrow = arrow(length = unit(0.01, "npc"))
   ) + 
   # home team velocities
   geom_segment(
-    data = game_ %>% dplyr::filter(club == "PHI"),
+    data = game_ %>% dplyr::filter(club == "LAC"),
     mapping = aes(x = x, y = y, xend = x + v_x, yend = y + v_y),
     colour = df_colors$home_2, size = 1, arrow = arrow(length = unit(0.01, "npc"))
   ) +
   # away team locs and jersey numbers
   geom_point(
-    data = game_ %>% dplyr::filter(club == "DAL"),
+    data = game_ %>% dplyr::filter(club == "SEA"),
     mapping = aes(x = x, y = y),
     fill = "#f8f9fa", colour = df_colors$away_2,
     shape = 21, alpha = 1, size = 8, stroke = 1.5
   ) +
   geom_text(
-    data = game_ %>% dplyr::filter(club == "DAL"),
+    data = game_ %>% dplyr::filter(club == "SEA"),
     mapping = aes(x = x, y = y, label = jerseyNumber),
     colour = df_colors$away_1, size = 4.5
   ) +
-  geom_text(
-    data = game_ %>% dplyr::filter(club == "DAL"),
-    mapping = aes(x = x, y = y, label = tackle_prob),
-    colour = "#f8f9fa", size = 4.5, vjust = -1, fontface = "bold"
-  ) +
   # home team locs and jersey numbers
   geom_point(
-    data = game_ %>% dplyr::filter(club == "PHI"),
+    data = game_ %>% dplyr::filter(club == "LAC"),
     mapping = aes(x = x, y = y),
     fill = df_colors$home_1, colour = df_colors$home_2,
     shape = 21, alpha = 1, size = 8, stroke = 1.5
   ) +
   geom_text(
-    data = game_ %>% dplyr::filter(club == "PHI"),
+    data = game_ %>% dplyr::filter(club == "LAC"),
     mapping = aes(x = x, y = y, label = jerseyNumber),
     colour = df_colors$home_2, size = 4.5, vjust = .5
+  ) +
+  geom_text(
+    data = game_ %>% dplyr::filter(club == "LAC"),
+    mapping = aes(x = x, y = y, label = tackle_prob),
+    colour = "#f8f9fa", size = 4.5, vjust = -1, fontface = "bold"
   ) +
   # ball
   geom_point(
