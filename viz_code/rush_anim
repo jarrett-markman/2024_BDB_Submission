@@ -18,7 +18,7 @@ game_ <- data %>%
          tackle_prob = ifelse(tackle_prob < .1, 0, tackle_prob)) # Change vals so that only high probabilities appear
 
 los <- game_$absoluteYardlineNumber
-tog <- game_$yardsToGo + los
+tog <- los - game_$yardsToGo
 
 df_colors <- fetch_team_colors(h_team_ = "PHI", a_team_ = "DAL", diverge_ = T)
 
