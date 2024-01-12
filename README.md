@@ -18,6 +18,22 @@ library(gt)
 library(gtExtras)
 library(ggthemes)
 ```
+- Read in the data
+```{r}
+games <- read_csv("games.csv")
+players <- read_csv("players.csv")
+plays <- read_csv("plays.csv")
+tackles <- read_csv("tackles.csv")
+tracking_wk1 <- read_csv("tracking_week_1.csv")
+tracking_wk2 <- read_csv("tracking_week_2.csv")
+tracking_wk3 <- read_csv("tracking_week_3.csv")
+tracking_wk4 <- read_csv("tracking_week_4.csv")
+tracking_wk5 <- read_csv("tracking_week_5.csv")
+tracking_wk6 <- read_csv("tracking_week_6.csv")
+tracking_wk7 <- read_csv("tracking_week_7.csv")
+tracking_wk8 <- read_csv("tracking_week_8.csv")
+tracking_wk9 <- read_csv("tracking_week_9.csv")
+```
 - Set the seed
 ```
 set.seed(1234)
